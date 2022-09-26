@@ -1,15 +1,11 @@
-<<<<<<< HEAD
 from rest_framework import generics, mixins, permissions, authentication
-=======
-from rest_framework import generics, mixins
->>>>>>> 693303733b043fc3700ac9d3683553f5b011f744
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .permissions import IsStaffEditorPermission
-
+from api.authentication import TokenAuthentication
 
 """
 #############################################################################################################
@@ -48,7 +44,7 @@ class ProductDestroyAPIView(generics.DestroyAPIView):
 class ProductListCreateAPIView(generics.ListCreateAPIView):
   queryset = Product.objects.all()
   serializer_class = ProductSerializer
-  authentication_classes = [authentication.SessionAuthentication]
+  authentication_classes = [authentication.SessionAuthentication, TokenAuthentication]
   permission_classes = [permissions.IsAdminUser, IsStaffEditorPermission]
 
   def perfom_create(self, serializer):
@@ -67,18 +63,6 @@ class ProductListAPIView(generics.ListAPIView):
   # lookup_field = "pk"
 """
 
-<<<<<<< HEAD
-class ProductMixinView(mixins.ListModelMixin, generics.GenericAPIView):
-  queryset = Product.objects.all()
-  serializer_class = ProductSerializer
-
-  def get(self, request, *args, **kwargs):
-    return self.list(request, *args, **kwargs)
-
-  def post(self, request, *args, **kwargs):
-    pass
-
-=======
 """
 #############################################################################################################
 """
@@ -105,7 +89,6 @@ class ProductMixin(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.Retrie
 """
 
 # FUNCTION BASED VIEW
->>>>>>> 693303733b043fc3700ac9d3683553f5b011f744
 @api_view(["GET", "POST"])
 def product_alt_view(request, pk=None, *args, **kwargs):
   method = request.method 
