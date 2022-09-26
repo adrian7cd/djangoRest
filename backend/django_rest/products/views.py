@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from rest_framework import generics, mixins, permissions, authentication
+=======
+from rest_framework import generics, mixins
+>>>>>>> 693303733b043fc3700ac9d3683553f5b011f744
 from .models import Product
 from .serializers import ProductSerializer
 from rest_framework.decorators import api_view
@@ -7,6 +11,12 @@ from django.shortcuts import get_object_or_404
 from .permissions import IsStaffEditorPermission
 
 
+"""
+#############################################################################################################
+"""
+
+
+# CLASS BASED VIEWS
 class ProductDetailAPIView(generics.RetrieveAPIView):
   queryset = Product.objects.all()
   serializer_class = ProductSerializer
@@ -57,6 +67,7 @@ class ProductListAPIView(generics.ListAPIView):
   # lookup_field = "pk"
 """
 
+<<<<<<< HEAD
 class ProductMixinView(mixins.ListModelMixin, generics.GenericAPIView):
   queryset = Product.objects.all()
   serializer_class = ProductSerializer
@@ -67,6 +78,34 @@ class ProductMixinView(mixins.ListModelMixin, generics.GenericAPIView):
   def post(self, request, *args, **kwargs):
     pass
 
+=======
+"""
+#############################################################################################################
+"""
+
+# MIXIN GENERIC VIEW
+class ProductMixin(mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, generics.GenericAPIView):
+
+  queryset = Product.objects.all()
+  serializer_class = ProductSerializer
+  lookup_field = "pk"
+
+  def get(self, request, *args, **kwargs):
+    pk = kwargs.get("pk")
+    if pk is not None:
+      return self.retrieve(request, *args, **kwargs)
+    return self.list(request, *args, **kwargs)
+
+  def post(self, request, *args, **kwargs):
+    return self.create(request, *args, **kwargs)
+
+
+"""
+#############################################################################################################
+"""
+
+# FUNCTION BASED VIEW
+>>>>>>> 693303733b043fc3700ac9d3683553f5b011f744
 @api_view(["GET", "POST"])
 def product_alt_view(request, pk=None, *args, **kwargs):
   method = request.method 
